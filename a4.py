@@ -4,25 +4,43 @@
 
 class TTTBoard:
     """A tic tac toe board
-
+    
     Attributes:
         board - a list of '*'s, 'X's & 'O's. 'X's represent moves by player 'X', 'O's
             represent moves by player 'O' and '*'s are spots no one has yet played on
     """
-    def __init__(self, s = "*"):
-        self.tl = s
-        self.tm = s
-        self.tr = s
-        self.ml = s
-        self.mm = s
-        self.mr = s
-        self.ll = s
-        self.lm = s
-        self.lr = s
+    def __init__(self) -> None:
+        self.board = ['*']* 9
 
     def __str__(self):
-        s = f"{self.tl} {self.tm} {self.tr}\n{self.ml} {self.mm} {self.mr}\n{self.ll} {self.lm} {self.lr}" 
-        return s
+        ret = ""
+        for x in [0,3,6]:
+            ret += (self.board[x]+ " " + self.board[x+1]+ " " + self.board[x+2] + "\n")
+        return ret
+             
+    def make_move(self, player, pos):
+        if pos > 8 or pos < 0 or self.board[pos] != '*':
+            return False
+        self.board[pos] = player
+        return True
+    
+    def has_won(self, player):
+        ps = [player] * 3 #sets a row of 3 markers
+        if self.board[:3] == ps or self.board[3:6] == ps or self.board[6:] == ps: # row condition
+            return True
+        if self.board[::3] == ps or self.board[1::3] == ps or self.board[2::3] == ps: #column condition
+            return True
+        if self.board[::4] == ps or self.board[2:7:2] == ps: #diagonal condition
+            return True
+        return False
+    
+    def game_over(self):
+        if self.has_won("X") or self.has_won("O") or "*" not in self.board:
+            return True
+        return False
+    
+    def clear(self):
+        self.board = ['*'] * 9
 
 
 def play_tic_tac_toe() -> None:
@@ -102,4 +120,4 @@ if __name__ == "__main__":
     print("All tests passed!")
 
     # uncomment to play!
-    # play_tic_tac_toe()
+    play_tic_tac_toe()
